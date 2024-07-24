@@ -9,9 +9,11 @@ import { provideFirestore, getFirestore } from '@angular/fire/firestore';
 import { provideAuth, getAuth } from '@angular/fire/auth';
 import { BirthdaysComponent } from './birthdays/birthdays.component';
 import { TaskbarComponent } from './taskbar/taskbar.component';
+import { ShowAllComponent } from './show-all/show-all.component';
+import { AddPersonComponent } from './add-person/add-person.component';
 
 @NgModule({
-  declarations: [AppComponent, BirthdaysComponent, TaskbarComponent],
+  declarations: [AppComponent, BirthdaysComponent, TaskbarComponent, ShowAllComponent, AddPersonComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,

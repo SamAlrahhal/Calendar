@@ -1,13 +1,14 @@
-<div class="row">
-  <div class="col-xs-12 col-sm-4">
-    <ul class="list-group">
-      <li *ngFor="let contact of birthdayService.birthdays" class="list-group-item">
-        <a routerLink="{{contact.id}}" routerLinkActive="active">{{contact.lastName}}</a>
-      </li>
-    </ul>
+<div class="person-card">
+  <div *ngIf="isShowAllRoute()" class="settings-btn-container">
+    <button class="settings-btn">
+      <img src="assets/gear-icon.png" alt="gear icon" class="gearIcon">
+    </button>
   </div>
-
-  <div class="col-xs-12 col-sm-8">
-    <router-outlet></router-outlet>
+  <!-- <img [src]="person.image" alt="person image" class="person-image" /> -->
+  <img src="assets/gear-icon.png" alt="gear icon" class="gearIcon">
+  <div class="person-details">
+    <h3>{{ person.name }}</h3>
+    <p>Birthday: {{ person.birthdate | date: 'MMM d' }}</p>
+    <p>Phone: {{ person.phone }}</p>
   </div>
 </div>

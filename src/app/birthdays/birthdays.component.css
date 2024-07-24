@@ -1,0 +1,73 @@
+.person-card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  background-color: #0097A7;
+  border: 1px solid #00838F;
+  border-radius: 12px;
+  width: 400px;
+  height: 100px;
+  margin-bottom: 1rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease-in-out;
+}
+
+.person-card:hover {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+.person-image {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 50%;
+  margin-right: 1rem;
+}
+
+.person-details {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex-grow: 1;
+  height: 100%;
+}
+
+.person-details>* {
+  margin: 0;
+}
+
+
+.settings-btn-container {
+  position: absolute;
+  right: 0;
+  top: 0;
+  padding-top: 10px;
+  padding-right: 10px;
+}
+
+.settings-btn {
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 3px;
+  font-weight: bold;
+  font-size: 0.8rem;
+  background-color: #0097A7;
+}
+
+.gearIcon {
+  width: 25px;
+  height: 25px;
+}
+
+h3 {
+  color: #00E5FF;
+  font: normal 16px/26px system-ui,
+    Arial,
+    sans-serif;
+}
+
+p {
+  color: #E0F7FA;
+}

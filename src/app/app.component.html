@@ -1,3 +1,39 @@
-<app-birthdays></app-birthdays>
-<app-taskbar></app-taskbar>
+<!-- <div *ngIf="shouldShowBirthdays()"> -->
+  <div>
+    <h2>Birthdays Today</h2>
+    <div class="birthday-container">
+      <ng-container *ngIf="birthdaysToday.length > 0; else noBirthdaysToday">
+        <!-- <app-person *ngFor="let person of birthdaysToday" [person]="person"></app-person> -->
+      </ng-container>
+      <ng-template #noBirthdaysToday>
+        <p>No one</p>
+      </ng-template>
+    </div>
+  <!-- </div> -->
 
+  <div>
+    <h2>Birthdays This Week</h2>
+    <div class="birthday-container">
+      <ng-container *ngIf="birthdaysThisWeek.length > 0; else noBirthdaysThisWeek">
+        <!-- <app-person *ngFor="let person of birthdaysThisWeek" [person]="person"></app-person> -->
+      </ng-container>
+      <ng-template #noBirthdaysThisWeek>
+        <p>No one</p>
+      </ng-template>
+    </div>
+  </div>
+
+  <div>
+    <h2>Birthdays This Month</h2>
+    <div class="birthday-container">
+      <ng-container *ngIf="birthdaysThisMonth.length > 0; else noBirthdaysThisMonth">
+        <!-- <app-person *ngFor="let person of birthdaysThisMonth" [person]="person"></app-person> -->
+      </ng-container>
+      <ng-template #noBirthdaysThisMonth>
+        <p>No one</p>
+      </ng-template>
+    </div>
+  </div>
+</div>
+<router-outlet></router-outlet>
+<app-taskbar></app-taskbar>

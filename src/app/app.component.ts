@@ -6,5 +6,9 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css'],
 })
 export class AppComponent {
+  people: any[] = [];
+  birthdaysToday: any[] = [];
+  birthdaysThisWeek: any[] = [];
+  birthdaysThisMonth: any[] = [];
   title = 'Calendar';
 }
