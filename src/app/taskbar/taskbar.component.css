@@ -1,21 +1,52 @@
-.birthday-container {
+ul {
+  list-style: none;
   display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
   flex-direction: column;
-  align-items: center;
-  gap: 1rem;
-  justify-content: center;
-
+  justify-content: flex-start;
+  align-items: flex-start;
+  background-color: #00838F;
+  padding: 0;
+  margin: 0;
+  height: 100%;
+  position: fixed;
+  left: 0;
+  top: 0;
 }
 
-h2 {
+li {
+  width: 100%;
   text-align: center;
-  color: #B2EBF2;
-  margin: 1rem;
-  font: Verdana;
+  margin: 5px 0;
 }
 
-p {
-  color: #FF8A80;
+a {
+  display: block;
+  color: #E0F7FA;
+  text-decoration: none;
+  padding: 10px;
+  border-radius: 5px;
+  font: normal 16px/26px system-ui,
+    Arial,
+    sans-serif;
+  transition: background-color 0.2s;
+}
+
+a:hover {
+  background-color: #00ACC1;
+}
+
+.active {
+  background-color: #00ACC1;
+  font-weight: bold;
+}
+
+/* Add margin-top to the content to push it down by the height of the taskbar */
+.content {
+  margin-top: 50px;
+  /* Change the value to match the height of your taskbar */
+}
+
+.container {
+  margin-left: 150px;
+  /* Change the value to match the width of your taskbar */
 }
