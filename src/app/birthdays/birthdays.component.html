@@ -1,7 +1,7 @@
 <div class="row">
   <div class="col-xs-12 col-sm-4">
     <ul class="list-group">
-      <li *ngFor="let contact of contactService.contacts" class="list-group-item">
+      <li *ngFor="let contact of birthdayService.birthdays" class="list-group-item">
         <a routerLink="{{contact.id}}" routerLinkActive="active">{{contact.lastName}}</a>
       </li>
     </ul>

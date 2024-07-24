@@ -7,10 +7,10 @@ import { environment } from '../environments/environment';
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { provideFirestore, getFirestore } from '@angular/fire/firestore';
 import { provideAuth, getAuth } from '@angular/fire/auth';
-import { ContactsComponent } from './contacts/contacts.component';
+import { BirthdaysComponent } from './birthdays/birthdays.component';
 
 @NgModule({
-  declarations: [AppComponent, ContactsComponent],
+  declarations: [AppComponent, BirthdaysComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
