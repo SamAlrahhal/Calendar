@@ -1,1 +1,35 @@
 /* You can add global styles to this file, and also import other style files */
+/* You can add global styles to this file, and also import other style files */
+.editDialog mat-dialog-container {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: inherit;
+}
+
+body {
+  background-color: #006064;
+}
+
+h2 {
+  font: normal 16px/26px system-ui,
+    Arial,
+    sans-serif;
+}
+
+h3 {
+  color: #B2EBF2;
+  font: normal 16px/26px system-ui,
+    Arial,
+    sans-serif;
+}
+
+p {
+  color: #B2EBF2;
+  font: normal 16px/26px system-ui,
+    Arial,
+    sans-serif;
+}
