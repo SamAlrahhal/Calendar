@@ -11,6 +11,7 @@ import {
   DocumentReference,
   addDoc,
   query,
+  Timestamp,
 } from '@angular/fire/firestore';
 import { Observable, from } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -26,6 +27,13 @@ export class BirthdayService {
     return collectionData<Birthday>(
       collection(this.firestore, 'birthdays') as CollectionReference<Birthday>,
       { idField: 'id' }
+    ).pipe(
+      map((birthdays) =>
+        birthdays.map((birthday) => ({
+          ...birthday,
+          birthdate: this.convertTimestamp(birthday.birthdate),
+        }))
+      )
     );
   }
 
@@ -59,8 +67,16 @@ export class BirthdayService {
         if (!data) {
           throw new Error('Birthday not found');
         }
-        return { id: snapshot.id, ...data } as Birthday;
+        return {
+          id: snapshot.id,
+          ...data,
+          birthdate: this.convertTimestamp(data.birthdate),
+        } as Birthday;
       })
     );
+  }
+
+  private convertTimestamp(timestamp: any): Date {
+    return timestamp instanceof Timestamp ? timestamp.toDate() : timestamp;
   }
 }
