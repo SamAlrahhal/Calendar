@@ -4,11 +4,11 @@
       <img src="assets/gear-icon.png" alt="gear icon" class="gearIcon">
     </button>
   </div>
-  <!-- <img [src]="person.image" alt="person image" class="person-image" /> -->
+  <!-- <img [src]="birthday.image" alt="birthday image" class="birthday-image" /> -->
   <img src="assets/gear-icon.png" alt="gear icon" class="gearIcon">
   <div class="person-details">
-    <h3>{{ person.name }}</h3>
-    <p>Birthday: {{ person.birthdate | date: 'MMM d' }}</p>
-    <p>Phone: {{ person.phone }}</p>
+    <h3>{{ birthday.firstName }} {{ birthday.lastName }}</h3>
+    <p>Birthday: {{ birthday.birthdate | date: 'MMM d' }}</p>
+    <p>Phone: {{ birthday.phoneNumber }}</p>
   </div>
 </div>

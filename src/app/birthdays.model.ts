@@ -3,6 +3,7 @@ export class Birthday {
     public id?: string,
     public firstName: string = '',
     public lastName: string = '',
-    public birthdate: Date = new Date()
+    public birthdate: Date = new Date(),
+    public phoneNumber: string = ''
   ) {}
 }
