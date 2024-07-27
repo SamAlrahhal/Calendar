@@ -17,6 +17,7 @@ export class EditPersonComponent implements OnInit, OnDestroy {
     public dialogRef: MatDialogRef<EditPersonComponent>
   ) {
     this.birthday = { ...data };
+    this.handleVisibilityChange = this.handleVisibilityChange.bind(this); // Ensure proper binding
   }
 
   ngOnInit(): void {
@@ -30,11 +31,11 @@ export class EditPersonComponent implements OnInit, OnDestroy {
     );
   }
 
-  handleVisibilityChange = () => {
-    if (document.hidden) {
+  handleVisibilityChange() {
+    if (document.visibilityState === 'hidden') {
       this.dialogRef.close();
     }
-  };
+  }
 
   onSubmit(): void {
     this.birthdayService.editBirthday(this.birthday).subscribe(() => {
