@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { BirthdayService } from './backend/birthday.service';
-import { Router } from '@angular/router'; // Import the Router
-import { Birthday } from './birthdays.model'; // Import the Birthday model
+import { Router } from '@angular/router';
+import { Birthday } from './birthdays.model';
 
 @Component({
   selector: 'app-root',
@@ -17,7 +17,7 @@ export class AppComponent implements OnInit {
   constructor(
     private birthdayService: BirthdayService,
     private router: Router
-  ) {} // Inject the Router
+  ) {}
 
   ngOnInit() {
     this.birthdayService.getBirthdays().subscribe((data) => {
@@ -28,8 +28,18 @@ export class AppComponent implements OnInit {
 
   categorizeBirthdays() {
     const today = new Date();
-    const oneWeekLater = new Date();
-    oneWeekLater.setDate(today.getDate() + 7);
+    const todayStart = new Date(
+      today.getFullYear(),
+      today.getMonth(),
+      today.getDate()
+    );
+    const oneWeekLater = new Date(todayStart);
+    oneWeekLater.setDate(todayStart.getDate() + 7);
+    const endOfMonth = new Date(
+      todayStart.getFullYear(),
+      todayStart.getMonth() + 1,
+      0
+    );
 
     this.birthdaysToday = [];
     this.birthdaysThisWeek = [];
@@ -38,18 +48,24 @@ export class AppComponent implements OnInit {
     this.birthdays.forEach((birthday) => {
       const birthdate = new Date(birthday.birthdate);
       const currentYearBirthday = new Date(
-        today.getFullYear(),
+        todayStart.getFullYear(),
         birthdate.getMonth(),
         birthdate.getDate()
       );
 
-      if (currentYearBirthday >= today) {
+      if (currentYearBirthday >= todayStart) {
         // Check if birthday is today or in the future
-        if (currentYearBirthday.toDateString() === today.toDateString()) {
+        if (currentYearBirthday.toDateString() === todayStart.toDateString()) {
           this.birthdaysToday.push(birthday);
-        } else if (currentYearBirthday <= oneWeekLater) {
+        } else if (
+          currentYearBirthday >= todayStart &&
+          currentYearBirthday <= oneWeekLater
+        ) {
           this.birthdaysThisWeek.push(birthday);
-        } else if (currentYearBirthday.getMonth() === today.getMonth()) {
+        } else if (
+          currentYearBirthday >= todayStart &&
+          currentYearBirthday <= endOfMonth
+        ) {
           this.birthdaysThisMonth.push(birthday);
         }
       }
@@ -58,7 +74,6 @@ export class AppComponent implements OnInit {
     console.log(this.router.url);
   }
 
-  // Create a helper method to check if you're not on certain routes
   shouldShowBirthdays(): boolean {
     return !['/show-all', '/add-person'].includes(this.router.url);
   }
