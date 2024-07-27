@@ -1,25 +1,40 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, OnDestroy } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { BirthdayService } from '../backend/birthday.service'; // Import BirthdayService
-import { Birthday } from '../birthdays.model'; // Import Birthday model
+import { BirthdayService } from '../backend/birthday.service';
+import { Birthday } from '../birthdays.model';
 
 @Component({
   selector: 'app-edit-person',
   templateUrl: './edit-person.component.html',
   styleUrls: ['./edit-person.component.css'],
 })
-export class EditPersonComponent implements OnInit {
+export class EditPersonComponent implements OnInit, OnDestroy {
   birthday: Birthday;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private birthdayService: BirthdayService, // Use BirthdayService
+    private birthdayService: BirthdayService,
     public dialogRef: MatDialogRef<EditPersonComponent>
   ) {
     this.birthday = { ...data };
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    document.addEventListener('visibilitychange', this.handleVisibilityChange);
+  }
+
+  ngOnDestroy(): void {
+    document.removeEventListener(
+      'visibilitychange',
+      this.handleVisibilityChange
+    );
+  }
+
+  handleVisibilityChange = () => {
+    if (document.hidden) {
+      this.dialogRef.close();
+    }
+  };
 
   onSubmit(): void {
     this.birthdayService.editBirthday(this.birthday).subscribe(() => {

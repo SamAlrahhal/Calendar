@@ -26,15 +26,6 @@ export class BirthdaysComponent implements OnInit, OnDestroy {
     }
   }
 
-  // onGetBirthdays() {
-  //   this.birthdaySub = this.birthdayService
-  //     .getBirthdays()
-  //     .subscribe((birthdays) => {
-  //       console.log(birthdays);
-  //       this.birthdays = birthdays;
-  //     });
-  // }
-
   isShowAllRoute() {
     return this.router.url === '/show-all';
   }
