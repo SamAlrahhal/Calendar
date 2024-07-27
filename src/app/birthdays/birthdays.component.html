@@ -4,8 +4,8 @@
       <img src="assets/gear-icon.png" alt="gear icon" class="gearIcon">
     </button>
   </div>
-  <!-- <img [src]="birthday.image" alt="birthday image" class="birthday-image" /> -->
-  <img src="assets/gear-icon.png" alt="gear icon" class="gearIcon">
+  <!-- <img *ngIf="birthday.image" [src]="birthday.image" alt="birthday image" class="birthday-image" /> -->
+  <img [src]="birthday.image" alt="person image" class="person-image" />
   <div class="person-details">
     <h3>{{ birthday.firstName }} {{ birthday.lastName }}</h3>
     <p>Birthday: {{ birthday.birthdate | date: 'MMM d' }}</p>
