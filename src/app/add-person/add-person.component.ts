@@ -1,58 +1,83 @@
 import { Component } from '@angular/core';
 import { Birthday } from '../birthdays.model';
 import { BirthdayService } from '../backend/birthday.service';
+import {
+  getStorage,
+  ref,
+  uploadBytesResumable,
+  getDownloadURL,
+} from '@angular/fire/storage';
+import { finalize } from 'rxjs/operators';
+import { environment } from '../../environments/environment';
+import { initializeApp } from 'firebase/app';
+
 @Component({
   selector: 'app-add-person',
   templateUrl: './add-person.component.html',
   styleUrls: ['./add-person.component.css'],
 })
 export class AddPersonComponent {
-  id!: string;
+  imageFile!: File;
   firstName!: string;
-  LanstName!: string;
-  birthdate!: Date;
+  lastName!: string;
+  birthdate!: string;
   phoneNumber!: string;
+
+  private storage = getStorage(initializeApp(environment.firebase));
 
   constructor(private birthdayService: BirthdayService) {}
 
   onSubmit() {
-    const newPerson: Birthday = {
-      id: this.id,
-      firstName: this.firstName,
-      lastName: this.LanstName,
-      birthdate: this.birthdate,
-      phoneNumber: this.phoneNumber,
-    };
+    const filePath = `images/${Date.now()}_${this.imageFile.name}`;
+    const fileRef = ref(this.storage, filePath);
+    const uploadTask = uploadBytesResumable(fileRef, this.imageFile);
 
-    // this.serversService.addPerson(newPerson).subscribe({
-    //   next: (response: any) => {
-    //     newPerson.birthdate = '';
-    //     newPerson.image = '';
-    //     newPerson.name = '';
-    //     newPerson.phone = '';
-    //   },
-    //   error: (error: any) => {
-    //     console.log('Error occurred: ', error);
-    //   },
-    //   complete: () => {
-    //     console.log('Completed');
-    //     window.location.reload();
-    //   },
-    // });
+    uploadTask.on(
+      'state_changed',
+      (snapshot) => {},
+      (error) => {
+        console.log('Error occurred: ', error);
+      },
+      () => {
+        getDownloadURL(uploadTask.snapshot.ref).then((url) => {
+          const newBirthday: Birthday = {
+            firstName: this.firstName,
+            lastName: this.lastName,
+            birthdate: new Date(this.birthdate),
+            phoneNumber: this.phoneNumber,
+            image: url,
+          };
+
+          this.birthdayService.addBirthday(newBirthday).subscribe({
+            next: (response: any) => {
+              this.resetForm();
+            },
+            error: (error: any) => {
+              console.log('Error occurred: ', error);
+            },
+            complete: () => {
+              console.log('Completed');
+              window.location.reload();
+            },
+          });
+        });
+      }
+    );
   }
-  // changeImage(event: Event): void {
-  //   const target = event.target as HTMLInputElement;
 
-  //   if (target.files && target.files[0]) {
-  //     const file = target.files[0];
+  changeImage(event: Event): void {
+    const target = event.target as HTMLInputElement;
 
-  //     const reader = new FileReader();
+    if (target.files && target.files[0]) {
+      this.imageFile = target.files[0];
+    }
+  }
 
-  //     reader.onload = () => {
-  //       this.image = reader.result as string;
-  //     };
-
-  //     reader.readAsDataURL(file);
-  //   }
-  // }
+  private resetForm(): void {
+    this.firstName = '';
+    this.lastName = '';
+    this.birthdate = '';
+    this.phoneNumber = '';
+    this.imageFile = null as any;
+  }
 }

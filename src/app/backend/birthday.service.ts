@@ -48,6 +48,14 @@ export class BirthdayService {
     return from(setDoc(birthdayDoc, birthday)).pipe(map(() => {}));
   }
 
+  addBirthday(birthday: Birthday): Observable<void> {
+    const birthdaysCollection = collection(
+      this.firestore,
+      'birthdays'
+    ) as CollectionReference<Birthday>;
+    return from(addDoc(birthdaysCollection, birthday)).pipe(map(() => {}));
+  }
+
   deleteBirthday(id: string): Observable<void> {
     const birthdayDoc = doc(
       this.firestore,
