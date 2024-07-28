@@ -16,6 +16,8 @@ import { BirthdayService } from './backend/birthday.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatDialogModule } from '@angular/material/dialog';
 import { FormsModule } from '@angular/forms';
+import { LoginComponent } from './auth/login/login.component';
+import { SignupComponent } from './auth/signup/signup.component';
 
 @NgModule({
   declarations: [
@@ -25,6 +27,8 @@ import { FormsModule } from '@angular/forms';
     ShowAllComponent,
     AddPersonComponent,
     EditPersonComponent,
+    LoginComponent,
+    SignupComponent,
   ],
   imports: [
     BrowserModule,
