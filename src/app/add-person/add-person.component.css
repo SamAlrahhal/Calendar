@@ -11,6 +11,7 @@
 h2 {
   text-align: center;
   margin-bottom: 20px;
+  color: #E0F7FA;
 }
 
 form {
@@ -24,6 +25,7 @@ form {
 
 label {
   font-weight: bold;
+    color: #E0F7FA;
 }
 
 input[type="text"],

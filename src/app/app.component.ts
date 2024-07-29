@@ -75,6 +75,6 @@ export class AppComponent implements OnInit {
   }
 
   shouldShowBirthdays(): boolean {
-    return !['/show-all', '/add-person'].includes(this.router.url);
+    return !['/show-all', '/add-person', '/signup'].includes(this.router.url);
   }
 }
