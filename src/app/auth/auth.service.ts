@@ -4,13 +4,19 @@ import {
   Auth,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  signOut,
 } from '@angular/fire/auth';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  constructor(private auth: Auth, private router: Router) {}
+  token: string | null = null;
+  constructor(private auth: Auth, private router: Router) {
+    if (localStorage.getItem('token')) {
+      this.token = localStorage.getItem('token') as string;
+    }
+  }
 
   signup(email: string, password: string): Promise<string> {
     return createUserWithEmailAndPassword(this.auth, email, password)
@@ -19,5 +25,31 @@ export class AuthService {
         console.error('Signup error: ', error);
         return error.message;
       });
+  }
+
+  login(email: string, password: string): Promise<boolean> {
+    return signInWithEmailAndPassword(this.auth, email, password)
+      .then(() => {
+        this.auth.currentUser?.getIdToken().then((token: string) => {
+          this.token = token;
+          localStorage.setItem('token', token);
+        });
+        return true;
+      })
+      .catch((error) => {
+        console.error('Login error: ', error);
+        return false;
+      });
+  }
+
+  logout() {
+    this.auth.signOut();
+    this.token = null;
+    localStorage.removeItem('token');
+    this.router.navigate(['/login']);
+  }
+
+  isLoggedIn() {
+    return this.token !== null;
   }
 }
