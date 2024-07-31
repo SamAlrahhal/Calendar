@@ -18,7 +18,6 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { FormsModule } from '@angular/forms';
 import { LoginComponent } from './auth/login/login.component';
 import { SignupComponent } from './auth/signup/signup.component';
-import { RedirectComponent } from './auth/redirect/redirect.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +29,6 @@ import { RedirectComponent } from './auth/redirect/redirect.component';
     EditPersonComponent,
     LoginComponent,
     SignupComponent,
-    RedirectComponent,
   ],
   imports: [
     BrowserModule,

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { BirthdayService } from './backend/birthday.service';
 import { Router } from '@angular/router';
 import { Birthday } from './birthdays.model';
-import { AuthService } from './auth/auth.service'; // Import AuthService
+import { AuthService } from './auth/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -17,7 +17,7 @@ export class AppComponent implements OnInit {
 
   constructor(
     private birthdayService: BirthdayService,
-    private authService: AuthService, // Inject AuthService
+    private authService: AuthService,
     private router: Router
   ) {}
 
@@ -60,21 +60,23 @@ export class AppComponent implements OnInit {
         birthdate.getDate()
       );
 
-      if (currentYearBirthday >= todayStart) {
-        // Check if birthday is today or in the future
-        if (currentYearBirthday.toDateString() === todayStart.toDateString()) {
-          this.birthdaysToday.push(birthday);
-        } else if (
-          currentYearBirthday >= todayStart &&
-          currentYearBirthday <= oneWeekLater
-        ) {
-          this.birthdaysThisWeek.push(birthday);
-        } else if (
-          currentYearBirthday >= todayStart &&
-          currentYearBirthday <= endOfMonth
-        ) {
-          this.birthdaysThisMonth.push(birthday);
-        }
+      // Check if birthday is today
+      if (currentYearBirthday.toDateString() === todayStart.toDateString()) {
+        this.birthdaysToday.push(birthday);
+      }
+      // Check if birthday is within this week
+      else if (
+        currentYearBirthday > todayStart &&
+        currentYearBirthday <= oneWeekLater
+      ) {
+        this.birthdaysThisWeek.push(birthday);
+      }
+      // Check if birthday is within this month
+      else if (
+        currentYearBirthday > oneWeekLater &&
+        currentYearBirthday <= endOfMonth
+      ) {
+        this.birthdaysThisMonth.push(birthday);
       }
     });
 
