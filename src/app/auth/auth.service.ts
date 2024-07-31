@@ -12,9 +12,11 @@ import {
 })
 export class AuthService {
   token: string | null = null;
+
   constructor(private auth: Auth, private router: Router) {
-    if (localStorage.getItem('token')) {
-      this.token = localStorage.getItem('token') as string;
+    const storedToken = localStorage.getItem('token');
+    if (storedToken) {
+      this.token = storedToken;
     }
   }
 

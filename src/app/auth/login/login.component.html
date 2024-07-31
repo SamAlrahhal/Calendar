@@ -1,6 +1,9 @@
 <div class="container">
   <h2>Login</h2>
   <form (ngSubmit)="onLogin(f)" #f="ngForm">
+    <div *ngIf="invalidLogin">
+      <p>Invalid login. Please try again.</p>
+    </div>
     <div class="form-group">
       <label for="email">Email</label>
       <input type="email" id="email" name="email" ngModel class="form-control" required email>

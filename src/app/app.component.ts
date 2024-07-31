@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { BirthdayService } from './backend/birthday.service';
 import { Router } from '@angular/router';
 import { Birthday } from './birthdays.model';
+import { AuthService } from './auth/auth.service'; // Import AuthService
 
 @Component({
   selector: 'app-root',
@@ -16,10 +17,16 @@ export class AppComponent implements OnInit {
 
   constructor(
     private birthdayService: BirthdayService,
+    private authService: AuthService, // Inject AuthService
     private router: Router
   ) {}
 
   ngOnInit() {
+    if (!this.authService.isLoggedIn()) {
+      this.router.navigate(['/login']);
+      return;
+    }
+
     this.birthdayService.getBirthdays().subscribe((data) => {
       this.birthdays = data;
       this.categorizeBirthdays();
