@@ -2,9 +2,10 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { BirthdayService } from '../backend/birthday.service';
 import { Subscription } from 'rxjs';
 import { Birthday } from '../birthdays.model';
-import { Router } from '@angular/router';
+import { Router, Event as RouterEvent, NavigationStart } from '@angular/router';
 import { EditPersonComponent } from '../edit-person/edit-person.component';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { filter, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-birthdays',
@@ -21,7 +22,15 @@ export class BirthdaysComponent implements OnInit, OnDestroy {
     public birthdayService: BirthdayService,
     private router: Router,
     public dialog: MatDialog
-  ) {}
+  ) {
+    // Close any opened dialog when route changes
+    this.router.events
+      .pipe(
+        filter((event: RouterEvent) => event instanceof NavigationStart),
+        tap(() => this.dialog.closeAll())
+      )
+      .subscribe();
+  }
 
   ngOnInit(): void {}
 
@@ -43,6 +52,7 @@ export class BirthdaysComponent implements OnInit, OnDestroy {
     this.dialogRef = this.dialog.open(EditPersonComponent, {
       data: { ...birthday },
       panelClass: 'editDialog',
+      closeOnNavigation: true,
     });
 
     this.dialogRef.backdropClick().subscribe(() => {
