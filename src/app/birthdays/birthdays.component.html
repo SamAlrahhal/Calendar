@@ -1,6 +1,6 @@
 <div class="person-card">
   <div *ngIf="isShowAllRoute()" class="settings-btn-container">
-    <button class="settings-btn">
+    <button class="settings-btn" (click)="openEditDialog(birthday)">
       <img src="assets/gear-icon.png" alt="gear icon" class="gearIcon">
     </button>
   </div>
