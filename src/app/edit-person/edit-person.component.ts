@@ -2,14 +2,19 @@ import { Component, Inject, OnInit, OnDestroy } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { BirthdayService } from '../backend/birthday.service';
 import { Birthday } from '../birthdays.model';
+import { CanDeactivateGuard } from '../auth/can-decativate-guard';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-edit-person',
   templateUrl: './edit-person.component.html',
   styleUrls: ['./edit-person.component.css'],
 })
-export class EditPersonComponent implements OnInit, OnDestroy {
+export class EditPersonComponent
+  implements OnInit, OnDestroy, CanDeactivateGuard
+{
   birthday: Birthday;
+  saved: boolean = false;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -22,6 +27,7 @@ export class EditPersonComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     document.addEventListener('visibilitychange', this.handleVisibilityChange);
+    this.saved = false;
   }
 
   ngOnDestroy(): void {
@@ -39,6 +45,7 @@ export class EditPersonComponent implements OnInit, OnDestroy {
 
   onSubmit(): void {
     this.birthdayService.editBirthday(this.birthday).subscribe(() => {
+      this.saved = true;
       this.dialogRef.close(this.birthday);
       window.location.reload();
     });
@@ -69,5 +76,12 @@ export class EditPersonComponent implements OnInit, OnDestroy {
       this.dialogRef.close({ deleted: true, id: this.birthday.id });
       window.location.reload();
     });
+  }
+
+  canDeactivate(): Observable<boolean> | Promise<boolean> | boolean {
+    if (this.saved === false) {
+      return confirm('Do you want to discard the changes?');
+    }
+    return true;
   }
 }

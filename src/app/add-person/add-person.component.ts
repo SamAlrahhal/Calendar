@@ -10,24 +10,29 @@ import {
 import { finalize } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 import { initializeApp } from 'firebase/app';
+import { CanDeactivateGuard } from '../auth/can-decativate-guard';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-add-person',
   templateUrl: './add-person.component.html',
   styleUrls: ['./add-person.component.css'],
 })
-export class AddPersonComponent {
+export class AddPersonComponent implements CanDeactivateGuard {
   imageFile!: File;
   firstName!: string;
   lastName!: string;
   birthdate!: string;
   phoneNumber!: string;
 
+  saved: boolean = false;
+
   private storage = getStorage(initializeApp(environment.firebase));
 
   constructor(private birthdayService: BirthdayService) {}
 
   onSubmit() {
+    this.saved = true;
     const filePath = `images/${Date.now()}_${this.imageFile.name}`;
     const fileRef = ref(this.storage, filePath);
     const uploadTask = uploadBytesResumable(fileRef, this.imageFile);
@@ -71,6 +76,13 @@ export class AddPersonComponent {
     if (target.files && target.files[0]) {
       this.imageFile = target.files[0];
     }
+  }
+
+  canDeactivate(): Observable<boolean> | Promise<boolean> | boolean {
+    if (this.saved === false) {
+      return confirm('Do you want to discard the changes?');
+    }
+    return true;
   }
 
   private resetForm(): void {
