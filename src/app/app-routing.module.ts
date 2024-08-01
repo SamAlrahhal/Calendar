@@ -5,6 +5,8 @@ import { ShowAllComponent } from './show-all/show-all.component';
 import { SignupComponent } from './auth/signup/signup.component';
 import { LoginComponent } from './auth/login/login.component';
 import { AuthGuard } from './auth/auth-guard.service';
+import { UnAuthGuard } from './auth/unauth-guard.service';
+import { AppComponent } from './app.component';
 
 const routes: Routes = [
   {
@@ -13,8 +15,8 @@ const routes: Routes = [
     canActivate: [AuthGuard],
   },
   { path: 'show-all', component: ShowAllComponent, canActivate: [AuthGuard] },
-  { path: 'signup', component: SignupComponent },
-  { path: 'login', component: LoginComponent },
+  { path: 'signup', component: SignupComponent, canActivate: [UnAuthGuard] },
+  { path: 'login', component: LoginComponent, canActivate: [UnAuthGuard] },
 ];
 
 @NgModule({
