@@ -79,8 +79,6 @@ export class AppComponent implements OnInit {
         this.birthdaysThisMonth.push(birthday);
       }
     });
-
-    console.log(this.router.url);
   }
 
   shouldShowBirthdays(): boolean {

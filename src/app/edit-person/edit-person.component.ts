@@ -47,7 +47,6 @@ export class EditPersonComponent
     this.birthdayService.editBirthday(this.birthday).subscribe(() => {
       this.saved = true;
       this.dialogRef.close(this.birthday);
-      window.location.reload();
     });
   }
 
@@ -74,7 +73,6 @@ export class EditPersonComponent
   onDelete(): void {
     this.birthdayService.deleteBirthday(this.birthday.id!).subscribe(() => {
       this.dialogRef.close({ deleted: true, id: this.birthday.id });
-      window.location.reload();
     });
   }
 

@@ -6,6 +6,8 @@ import {
   signInWithEmailAndPassword,
   signOut,
 } from '@angular/fire/auth';
+import { Observable } from 'rxjs/internal/Observable';
+import { of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -55,7 +57,7 @@ export class AuthService {
     return this.token !== null;
   }
 
-  getCurrentUserEmail() {
-    return this.auth.currentUser?.email;
+  getCurrentUserEmail(): Observable<string | null> {
+    return of(this.auth.currentUser?.email ?? null);
   }
 }
