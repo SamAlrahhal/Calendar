@@ -54,4 +54,8 @@ export class AuthService {
   isLoggedIn() {
     return this.token !== null;
   }
+
+  getCurrentUserEmail() {
+    return this.auth.currentUser?.email;
+  }
 }

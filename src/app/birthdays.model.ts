@@ -5,6 +5,7 @@ export class Birthday {
     public lastName: string = '',
     public birthdate: Date = new Date(),
     public phoneNumber: string = '',
-    public image?: string
+    public image?: string,
+    public belongsTo?: string
   ) {}
 }

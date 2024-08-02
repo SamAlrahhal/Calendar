@@ -11,23 +11,31 @@ import {
   DocumentReference,
   addDoc,
   query,
+  where,
   Timestamp,
 } from '@angular/fire/firestore';
 import { Observable, from } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, switchMap } from 'rxjs/operators';
 import { Birthday } from '../birthdays.model';
+import { AuthService } from '../auth/auth.service'; // Import AuthService
+
 @Injectable({
   providedIn: 'root',
 })
 export class BirthdayService {
   birthdays: Birthday[] = [];
-  constructor(private firestore: Firestore) {}
+  constructor(private firestore: Firestore, private authService: AuthService) {}
 
   getBirthdays(): Observable<Birthday[]> {
-    return collectionData<Birthday>(
-      collection(this.firestore, 'birthdays') as CollectionReference<Birthday>,
-      { idField: 'id' }
-    ).pipe(
+    const userEmail = this.authService.getCurrentUserEmail();
+
+    const birthdaysCollection = collection(
+      this.firestore,
+      'birthdays'
+    ) as CollectionReference<Birthday>;
+    const q = query(birthdaysCollection, where('belongsTo', '==', userEmail));
+
+    return collectionData<Birthday>(q, { idField: 'id' }).pipe(
       map((birthdays) =>
         birthdays.map((birthday) => ({
           ...birthday,
@@ -49,11 +57,18 @@ export class BirthdayService {
   }
 
   addBirthday(birthday: Birthday): Observable<void> {
+    const userEmail = this.authService.getCurrentUserEmail();
+    if (!userEmail) {
+      throw new Error('User not logged in');
+    }
+
     const birthdaysCollection = collection(
       this.firestore,
       'birthdays'
     ) as CollectionReference<Birthday>;
-    return from(addDoc(birthdaysCollection, birthday)).pipe(map(() => {}));
+    return from(
+      addDoc(birthdaysCollection, { ...birthday, belongsTo: userEmail })
+    ).pipe(map(() => {}));
   }
 
   deleteBirthday(id: string): Observable<void> {
