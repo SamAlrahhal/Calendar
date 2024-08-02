@@ -17,14 +17,11 @@ export class ShowAllComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.birthdays = [];
     this.onGetBirthdays();
-
-    console.log('ShowAllComponent initialized');
   }
 
   ngOnDestroy(): void {
     if (this.birthdayChangesSub) {
       this.birthdayChangesSub.unsubscribe();
-      console.log('ShowAllComponent dead');
     }
   }
 
@@ -32,7 +29,6 @@ export class ShowAllComponent implements OnInit, OnDestroy {
     this.birthdayChangesSub = this.birthdayService
       .getBirthdays()
       .subscribe((birthdays) => {
-        console.log('birthdays:', birthdays);
         this.birthdays = birthdays;
       });
   }

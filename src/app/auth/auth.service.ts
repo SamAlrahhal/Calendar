@@ -6,20 +6,27 @@ import {
   signInWithEmailAndPassword,
   signOut,
 } from '@angular/fire/auth';
-import { Observable } from 'rxjs/internal/Observable';
-import { of } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
   token: string | null = null;
+  private currentUserEmailSubject: BehaviorSubject<string | null> =
+    new BehaviorSubject<string | null>(null);
+  private currentUserEmail$: Observable<string | null> =
+    this.currentUserEmailSubject.asObservable();
 
   constructor(private auth: Auth, private router: Router) {
     const storedToken = localStorage.getItem('token');
     if (storedToken) {
       this.token = storedToken;
     }
+
+    this.auth.onAuthStateChanged((user) => {
+      this.currentUserEmailSubject.next(user ? user.email : null);
+    });
   }
 
   signup(email: string, password: string): Promise<string> {
@@ -58,6 +65,6 @@ export class AuthService {
   }
 
   getCurrentUserEmail(): Observable<string | null> {
-    return of(this.auth.currentUser?.email ?? null);
+    return this.currentUserEmail$;
   }
 }

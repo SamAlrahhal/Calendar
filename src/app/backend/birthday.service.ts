@@ -14,35 +14,48 @@ import {
   where,
   Timestamp,
 } from '@angular/fire/firestore';
-import { Observable, from } from 'rxjs';
+import { Observable, from, Subject, of } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { Birthday } from '../birthdays.model';
-import { AuthService } from '../auth/auth.service'; // Import AuthService
+import { AuthService } from '../auth/auth.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class BirthdayService {
-  birthdays: Birthday[] = [];
+  private birthdayChanges = new Subject<void>();
+
   constructor(private firestore: Firestore, private authService: AuthService) {}
 
   getBirthdays(): Observable<Birthday[]> {
-    const userEmail = this.authService.getCurrentUserEmail();
+    return this.authService.getCurrentUserEmail().pipe(
+      switchMap((userEmail) => {
+        if (!userEmail) {
+          return of([]); // Handle not logged in or email not available
+        }
+        const birthdaysCollection = collection(
+          this.firestore,
+          'birthdays'
+        ) as CollectionReference<Birthday>;
+        const q = query(
+          birthdaysCollection,
+          where('belongsTo', '==', userEmail)
+        );
 
-    const birthdaysCollection = collection(
-      this.firestore,
-      'birthdays'
-    ) as CollectionReference<Birthday>;
-    const q = query(birthdaysCollection, where('belongsTo', '==', userEmail));
-
-    return collectionData<Birthday>(q, { idField: 'id' }).pipe(
-      map((birthdays) =>
-        birthdays.map((birthday) => ({
-          ...birthday,
-          birthdate: this.convertTimestamp(birthday.birthdate),
-        }))
-      )
+        return collectionData<Birthday>(q, { idField: 'id' }).pipe(
+          map((birthdays) =>
+            birthdays.map((birthday) => ({
+              ...birthday,
+              birthdate: this.convertTimestamp(birthday.birthdate),
+            }))
+          )
+        );
+      })
     );
+  }
+
+  getBirthdayChanges(): Observable<void> {
+    return this.birthdayChanges.asObservable();
   }
 
   editBirthday(birthday: Birthday): Observable<void> {
@@ -53,22 +66,56 @@ export class BirthdayService {
       this.firestore,
       `birthdays/${birthday.id}`
     ) as DocumentReference<Birthday>;
-    return from(setDoc(birthdayDoc, birthday)).pipe(map(() => {}));
+
+    // Preserve the belongsTo field
+    return from(getDoc(birthdayDoc)).pipe(
+      switchMap((snapshot) => {
+        const data = snapshot.data();
+        if (!data) {
+          throw new Error('Birthday not found');
+        }
+        const userEmail = this.authService.getCurrentUserEmail().pipe(
+          map((email) => {
+            if (!email) {
+              throw new Error('User not logged in');
+            }
+            return email;
+          })
+        );
+        return userEmail.pipe(
+          switchMap((email) => {
+            return setDoc(birthdayDoc, {
+              ...data,
+              ...birthday,
+              belongsTo: email,
+            }).then(() => {
+              this.birthdayChanges.next();
+            });
+          })
+        );
+      })
+    );
   }
 
   addBirthday(birthday: Birthday): Observable<void> {
-    const userEmail = this.authService.getCurrentUserEmail();
-    if (!userEmail) {
-      throw new Error('User not logged in');
-    }
-
-    const birthdaysCollection = collection(
-      this.firestore,
-      'birthdays'
-    ) as CollectionReference<Birthday>;
-    return from(
-      addDoc(birthdaysCollection, { ...birthday, belongsTo: userEmail })
-    ).pipe(map(() => {}));
+    return this.authService.getCurrentUserEmail().pipe(
+      switchMap((userEmail) => {
+        if (!userEmail) {
+          throw new Error('User not logged in');
+        }
+        const birthdaysCollection = collection(
+          this.firestore,
+          'birthdays'
+        ) as CollectionReference<Birthday>;
+        return from(
+          addDoc(birthdaysCollection, { ...birthday, belongsTo: userEmail })
+        ).pipe(
+          map(() => {
+            this.birthdayChanges.next();
+          })
+        );
+      })
+    );
   }
 
   deleteBirthday(id: string): Observable<void> {
@@ -76,25 +123,9 @@ export class BirthdayService {
       this.firestore,
       `birthdays/${id}`
     ) as DocumentReference<Birthday>;
-    return from(deleteDoc(birthdayDoc)).pipe(map(() => {}));
-  }
-
-  getBirthday(id: string): Observable<Birthday> {
-    const birthdayDoc = doc(
-      this.firestore,
-      `birthdays/${id}`
-    ) as DocumentReference<Birthday>;
-    return from(getDoc(birthdayDoc)).pipe(
-      map((snapshot) => {
-        const data = snapshot.data();
-        if (!data) {
-          throw new Error('Birthday not found');
-        }
-        return {
-          id: snapshot.id,
-          ...data,
-          birthdate: this.convertTimestamp(data.birthdate),
-        } as Birthday;
+    return from(deleteDoc(birthdayDoc)).pipe(
+      map(() => {
+        this.birthdayChanges.next();
       })
     );
   }

@@ -15,7 +15,7 @@ import { filter, tap } from 'rxjs/operators';
 export class BirthdaysComponent implements OnInit, OnDestroy {
   dialogRef: MatDialogRef<EditPersonComponent> | undefined;
   @Input() birthday!: Birthday;
-  birthdays: Birthday[] = [];
+  @Input() birthdays: Birthday[] = [];
   birthdaySub!: Subscription;
 
   constructor(
@@ -38,6 +38,10 @@ export class BirthdaysComponent implements OnInit, OnDestroy {
     if (this.birthdaySub) {
       this.birthdaySub.unsubscribe();
     }
+    document.removeEventListener(
+      'visibilitychange',
+      this.handleVisibilityChange
+    );
   }
 
   isShowAllRoute() {
