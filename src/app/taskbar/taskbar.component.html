@@ -1,19 +1,13 @@
 <div class="container">
   <nav>
     <ul>
-      <ng-template [ngIf]="auth.isLoggedIn()">
-        <li><a routerLink="/add-person">Add Person</a></li>
-        <li><a routerLink="/show-all">Show All</a></li>
-        <li><a routerLink="/">Home</a></li>
-        <li><a routerLink="/logout" (click)="auth.logout()">Logout</a></li>
-      </ng-template>
-      <ng-template [ngIf]="!auth.isLoggedIn()">
-        <li><a routerLink="/signup">Signup</a></li>
-        <li><a routerLink="/login">Login</a></li>
-      </ng-template>
-      <ng-template *ngIf="isAdmin">
-        <li><a routerLink="/admin">Admin</a></li>
-      </ng-template>
+      <li *ngIf="auth.isLoggedIn()"><a routerLink="/add-person">Add Person</a></li>
+      <li *ngIf="auth.isLoggedIn()"><a routerLink="/show-all">Show All</a></li>
+      <li *ngIf="auth.isLoggedIn()"><a routerLink="/">Home</a></li>
+      <li *ngIf="auth.isLoggedIn()"><a routerLink="/logout" (click)="onLogout()">Logout</a></li>
+      <li *ngIf="!auth.isLoggedIn()"><a routerLink="/signup">Signup</a></li>
+      <li *ngIf="!auth.isLoggedIn()"><a routerLink="/login">Login</a></li>
+      <li *ngIf="isAdmin"><a routerLink="/admin">Admin</a></li>
     </ul>
   </nav>
 </div>

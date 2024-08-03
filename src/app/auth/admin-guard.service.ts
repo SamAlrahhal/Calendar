@@ -1,4 +1,4 @@
-import { map, Observable } from 'rxjs';
+import { map, Observable, of } from 'rxjs';
 import { Admin } from '../admin.model';
 import { Injectable } from '@angular/core';
 import {
@@ -10,6 +10,7 @@ import {
 } from '@angular/router';
 import { AuthService } from './auth.service';
 import { BirthdayService } from '../backend/birthday.service';
+import { switchMap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -24,19 +25,21 @@ export class AdminGuardService implements CanActivate {
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
-  ):
-    | Observable<boolean>
-    | UrlTree
-    | Promise<boolean>
-    | UrlTree
-    | boolean
-    | UrlTree {
-    return this.birthdayService.getAdmin(this.authService.getUid()).pipe(
-      map((admin) => {
-        if (admin) {
-          return true;
+  ): Observable<boolean | UrlTree> {
+    return this.authService.getUid().pipe(
+      switchMap((uid) => {
+        if (uid) {
+          return this.birthdayService.getAdmin(uid).pipe(
+            map((admin) => {
+              if (admin) {
+                return true;
+              } else {
+                return false;
+              }
+            })
+          );
         } else {
-          return false;
+          return of(false);
         }
       })
     );

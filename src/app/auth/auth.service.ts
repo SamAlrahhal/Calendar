@@ -5,6 +5,7 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
+  User,
 } from '@angular/fire/auth';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 
@@ -18,6 +19,11 @@ export class AuthService {
   private currentUserEmail$: Observable<string | null> =
     this.currentUserEmailSubject.asObservable();
 
+  private currentUserUidSubject: BehaviorSubject<string | null> =
+    new BehaviorSubject<string | null>(null);
+  private currentUserUid$: Observable<string | null> =
+    this.currentUserUidSubject.asObservable();
+
   constructor(private auth: Auth, private router: Router) {
     const storedToken = localStorage.getItem('token');
     if (storedToken) {
@@ -26,6 +32,7 @@ export class AuthService {
 
     this.auth.onAuthStateChanged((user) => {
       this.currentUserEmailSubject.next(user ? user.email : null);
+      this.currentUserUidSubject.next(user ? user.uid : null);
     });
   }
 
@@ -57,10 +64,11 @@ export class AuthService {
     this.auth.signOut();
     this.token = null;
     localStorage.removeItem('token');
+    this.currentUserUidSubject.next(null);
     this.router.navigate(['/login']);
   }
 
-  isLoggedIn() {
+  isLoggedIn(): boolean {
     return this.token !== null;
   }
 
@@ -68,13 +76,7 @@ export class AuthService {
     return this.currentUserEmail$;
   }
 
-  getUid() {
-    if (this.auth.currentUser) {
-      console.log('user');
-      return this.auth.currentUser.uid;
-    } else {
-      console.log('not a user');
-      return null;
-    }
+  getUid(): Observable<string | null> {
+    return this.currentUserUid$;
   }
 }

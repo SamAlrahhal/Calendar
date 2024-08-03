@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../auth/auth.service';
 import { BirthdayService } from '../backend/birthday.service';
+import { switchMap } from 'rxjs/operators';
+import { of } from 'rxjs';
 
 @Component({
   selector: 'app-taskbar',
@@ -16,16 +18,22 @@ export class TaskbarComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    const uid = this.authService.getUid();
-    console.log(uid);
-    if (uid) {
-      this.birthdayService.getAdmin(uid).subscribe((admin) => {
+    this.authService
+      .getUid()
+      .pipe(
+        switchMap((uid) => {
+          if (uid) {
+            return this.birthdayService.getAdmin(uid);
+          } else {
+            console.log('uid not found');
+            return of(null);
+          }
+        })
+      )
+      .subscribe((admin) => {
         this.isAdmin = admin ? true : false;
         console.log(this.isAdmin);
       });
-    } else {
-      console.log('uid not found');
-    }
   }
 
   onLogout(): void {
