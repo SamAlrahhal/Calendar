@@ -70,8 +70,10 @@ export class AuthService {
 
   getUid() {
     if (this.auth.currentUser) {
+      console.log('user');
       return this.auth.currentUser.uid;
     } else {
+      console.log('not a user');
       return null;
     }
   }

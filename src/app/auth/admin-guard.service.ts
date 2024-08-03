@@ -11,6 +11,9 @@ import {
 import { AuthService } from './auth.service';
 import { BirthdayService } from '../backend/birthday.service';
 
+@Injectable({
+  providedIn: 'root',
+})
 export class AdminGuardService implements CanActivate {
   constructor(
     private authService: AuthService,

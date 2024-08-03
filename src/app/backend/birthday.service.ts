@@ -137,7 +137,6 @@ export class BirthdayService {
   }
 
   getAdmin(uid: string | null) {
-    console.log('getAdminStatus');
     return docData<Admin>(
       doc(this.firestore, `admin/` + uid) as DocumentReference<Admin>
     );
