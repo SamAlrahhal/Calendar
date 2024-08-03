@@ -142,4 +142,22 @@ export class BirthdayService {
       doc(this.firestore, `admin/` + uid) as DocumentReference<Admin>
     );
   }
+
+  showAllBirthdays(): Observable<Birthday[]> {
+    const birthdaysCollection = collection(
+      this.firestore,
+      'birthdays'
+    ) as CollectionReference<Birthday>;
+
+    return collectionData<Birthday>(birthdaysCollection, {
+      idField: 'id',
+    }).pipe(
+      map((birthdays) =>
+        birthdays.map((birthday) => ({
+          ...birthday,
+          birthdate: this.convertTimestamp(birthday.birthdate),
+        }))
+      )
+    );
+  }
 }

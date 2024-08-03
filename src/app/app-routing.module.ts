@@ -7,6 +7,8 @@ import { LoginComponent } from './auth/login/login.component';
 import { AuthGuard } from './auth/auth-guard.service';
 import { UnAuthGuard } from './auth/unauth-guard.service';
 import { AppComponent } from './app.component';
+import { AdminComponent } from './admin/admin.component';
+import { AdminGuardService } from './auth/admin-guard.service';
 
 const routes: Routes = [
   {
@@ -17,6 +19,10 @@ const routes: Routes = [
   { path: 'show-all', component: ShowAllComponent, canActivate: [AuthGuard] },
   { path: 'signup', component: SignupComponent, canActivate: [UnAuthGuard] },
   { path: 'login', component: LoginComponent, canActivate: [UnAuthGuard] },
+  {
+    path: 'admin',
+    component: AdminComponent,
+  },
 ];
 
 @NgModule({
