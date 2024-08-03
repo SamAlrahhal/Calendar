@@ -67,4 +67,12 @@ export class AuthService {
   getCurrentUserEmail(): Observable<string | null> {
     return this.currentUserEmail$;
   }
+
+  getUid() {
+    if (this.auth.currentUser) {
+      return this.auth.currentUser.uid;
+    } else {
+      return null;
+    }
+  }
 }

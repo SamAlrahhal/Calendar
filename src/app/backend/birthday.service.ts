@@ -13,11 +13,13 @@ import {
   query,
   where,
   Timestamp,
+  docData,
 } from '@angular/fire/firestore';
 import { Observable, from, Subject, of } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { Birthday } from '../birthdays.model';
 import { AuthService } from '../auth/auth.service';
+import { Admin } from '../admin.model';
 
 @Injectable({
   providedIn: 'root',
@@ -132,5 +134,12 @@ export class BirthdayService {
 
   private convertTimestamp(timestamp: any): Date {
     return timestamp instanceof Timestamp ? timestamp.toDate() : timestamp;
+  }
+
+  getAdmin(uid: string | null) {
+    console.log('getAdminStatus');
+    return docData<Admin>(
+      doc(this.firestore, `admin/` + uid) as DocumentReference<Admin>
+    );
   }
 }
