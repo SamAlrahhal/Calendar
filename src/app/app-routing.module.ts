@@ -10,7 +10,6 @@ import { AppComponent } from './app.component';
 import { AdminComponent } from './admin/admin.component';
 import { AdminGuardService } from './auth/admin-guard.service';
 import { ShowAllBirthdaysComponent } from './admin/show-all-birthdays/show-all-birthdays.component';
-import { ShowAllUsersComponent } from './admin/show-all-users/show-all-users.component';
 
 const routes: Routes = [
   {
@@ -21,11 +20,6 @@ const routes: Routes = [
       {
         path: 'birthdays',
         component: ShowAllBirthdaysComponent,
-        canActivateChild: [AdminGuardService],
-      },
-      {
-        path: 'users',
-        component: ShowAllUsersComponent,
         canActivateChild: [AdminGuardService],
       },
     ],
