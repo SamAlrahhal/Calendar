@@ -88,6 +88,8 @@ export class AppComponent implements OnInit {
       '/signup',
       '/login',
       '/admin',
+      '/admin/birthdays',
+      '/admin/users',
     ].includes(this.router.url);
   }
 }

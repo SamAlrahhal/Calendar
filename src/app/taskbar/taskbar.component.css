@@ -11,6 +11,7 @@ ul {
   position: fixed;
   left: 0;
   top: 0;
+  z-index: 1000;
 }
 
 li {
@@ -40,13 +41,10 @@ a:hover {
   font-weight: bold;
 }
 
-/* Add margin-top to the content to push it down by the height of the taskbar */
 .content {
   margin-top: 50px;
-  /* Change the value to match the height of your taskbar */
 }
 
 .container {
   margin-left: 150px;
-  /* Change the value to match the width of your taskbar */
 }
