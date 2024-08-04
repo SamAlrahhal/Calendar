@@ -9,8 +9,19 @@ import { UnAuthGuard } from './auth/unauth-guard.service';
 import { AppComponent } from './app.component';
 import { AdminComponent } from './admin/admin.component';
 import { AdminGuardService } from './auth/admin-guard.service';
+import { ShowAllBirthdaysComponent } from './admin/show-all-birthdays/show-all-birthdays.component';
+import { ShowAllUsersComponent } from './admin/show-all-users/show-all-users.component';
 
 const routes: Routes = [
+  {
+    path: 'admin',
+    component: AdminComponent,
+    canActivate: [AdminGuardService],
+    children: [
+      { path: 'birthdays', component: ShowAllBirthdaysComponent },
+      { path: 'users', component: ShowAllUsersComponent },
+    ],
+  },
   {
     path: 'add-person',
     component: AddPersonComponent,
@@ -19,11 +30,6 @@ const routes: Routes = [
   { path: 'show-all', component: ShowAllComponent, canActivate: [AuthGuard] },
   { path: 'signup', component: SignupComponent, canActivate: [UnAuthGuard] },
   { path: 'login', component: LoginComponent, canActivate: [UnAuthGuard] },
-  {
-    path: 'admin',
-    component: AdminComponent,
-    canActivate: [AdminGuardService],
-  },
 ];
 
 @NgModule({

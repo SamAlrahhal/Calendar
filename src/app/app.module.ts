@@ -19,6 +19,8 @@ import { FormsModule } from '@angular/forms';
 import { LoginComponent } from './auth/login/login.component';
 import { SignupComponent } from './auth/signup/signup.component';
 import { AdminComponent } from './admin/admin.component';
+import { ShowAllUsersComponent } from './admin/show-all-users/show-all-users.component';
+import { ShowAllBirthdaysComponent } from './admin/show-all-birthdays/show-all-birthdays.component';
 
 @NgModule({
   declarations: [
@@ -31,6 +33,8 @@ import { AdminComponent } from './admin/admin.component';
     LoginComponent,
     SignupComponent,
     AdminComponent,
+    ShowAllUsersComponent,
+    ShowAllBirthdaysComponent,
   ],
   imports: [
     BrowserModule,
