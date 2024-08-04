@@ -18,8 +18,16 @@ const routes: Routes = [
     component: AdminComponent,
     canActivate: [AdminGuardService],
     children: [
-      { path: 'birthdays', component: ShowAllBirthdaysComponent },
-      { path: 'users', component: ShowAllUsersComponent },
+      {
+        path: 'birthdays',
+        component: ShowAllBirthdaysComponent,
+        canActivateChild: [AdminGuardService],
+      },
+      {
+        path: 'users',
+        component: ShowAllUsersComponent,
+        canActivateChild: [AdminGuardService],
+      },
     ],
   },
   {
