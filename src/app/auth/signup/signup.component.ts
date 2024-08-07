@@ -1,11 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../auth.service';
 import { Router } from '@angular/router';
-import {
-  forbiddenNameValidator,
-  emailExistsValidator,
-} from '../custom-validators';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-signup',
@@ -13,37 +9,18 @@ import {
   styleUrls: ['./signup.component.css'],
 })
 export class SignupComponent implements OnInit {
-  signupForm: FormGroup;
   errorMessage: string = '';
 
-  constructor(
-    private fb: FormBuilder,
-    private authService: AuthService,
-    private router: Router
-  ) {
-    this.signupForm = this.fb.group({
-      email: [
-        '',
-        [Validators.required, Validators.email],
-        [emailExistsValidator(this.authService)],
-      ],
-      password: [
-        '',
-        [Validators.required, forbiddenNameValidator(/password/i)],
-      ],
-    });
-  }
+  constructor(private authService: AuthService, private router: Router) {}
 
-  ngOnInit(): void {}
-
-  onSignup(): void {
-    if (this.signupForm.invalid) {
+  onSignup(form: NgForm) {
+    if (form.invalid) {
       this.errorMessage = 'Please fill in all fields correctly.';
       return;
     }
 
-    const email = this.signupForm.value.email;
-    const password = this.signupForm.value.password;
+    const email = form.value.email;
+    const password = form.value.password;
 
     this.authService.signup(email, password).then((res) => {
       if (res === 'success') {
@@ -53,4 +30,6 @@ export class SignupComponent implements OnInit {
       }
     });
   }
+
+  ngOnInit(): void {}
 }
