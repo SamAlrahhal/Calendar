@@ -20,6 +20,7 @@ import { LoginComponent } from './auth/login/login.component';
 import { SignupComponent } from './auth/signup/signup.component';
 import { AdminComponent } from './admin/admin.component';
 import { ShowAllBirthdaysComponent } from './admin/show-all-birthdays/show-all-birthdays.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -40,6 +41,7 @@ import { ShowAllBirthdaysComponent } from './admin/show-all-birthdays/show-all-b
     MatDialogModule,
     AppRoutingModule,
     FormsModule,
+    ReactiveFormsModule,
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideFirestore(() => getFirestore()),
     provideAuth(() => getAuth()),
