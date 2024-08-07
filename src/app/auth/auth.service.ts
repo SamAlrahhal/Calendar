@@ -7,7 +7,8 @@ import {
   signOut,
   User,
 } from '@angular/fire/auth';
-import { BehaviorSubject, Observable, of } from 'rxjs';
+import { BehaviorSubject, from, map, Observable, of } from 'rxjs';
+import { AngularFireAuth } from '@angular/fire/compat/auth';
 
 @Injectable({
   providedIn: 'root',
@@ -24,7 +25,11 @@ export class AuthService {
   private currentUserUid$: Observable<string | null> =
     this.currentUserUidSubject.asObservable();
 
-  constructor(private auth: Auth, private router: Router) {
+  constructor(
+    private auth: Auth,
+    private router: Router,
+    private afAuth: AngularFireAuth
+  ) {
     const storedToken = localStorage.getItem('token');
     if (storedToken) {
       this.token = storedToken;
@@ -78,5 +83,11 @@ export class AuthService {
 
   getUid(): Observable<string | null> {
     return this.currentUserUid$;
+  }
+
+  checkEmailExists(email: string): Observable<boolean> {
+    return from(this.afAuth.fetchSignInMethodsForEmail(email)).pipe(
+      map((signInMethods) => signInMethods.length > 0)
+    );
   }
 }

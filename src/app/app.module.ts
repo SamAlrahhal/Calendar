@@ -15,7 +15,7 @@ import { EditPersonComponent } from './edit-person/edit-person.component';
 import { BirthdayService } from './backend/birthday.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatDialogModule } from '@angular/material/dialog';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LoginComponent } from './auth/login/login.component';
 import { SignupComponent } from './auth/signup/signup.component';
 import { AdminComponent } from './admin/admin.component';
@@ -40,6 +40,7 @@ import { ShowAllBirthdaysComponent } from './admin/show-all-birthdays/show-all-b
     MatDialogModule,
     AppRoutingModule,
     FormsModule,
+    ReactiveFormsModule,
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideFirestore(() => getFirestore()),
     provideAuth(() => getAuth()),
