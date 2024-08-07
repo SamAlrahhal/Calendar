@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../auth.service';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { CustomValidators } from '../../custom-validators';
+import { AsyncValidators } from '../../async-validators';
 
 @Component({
   selector: 'app-signup',
@@ -15,11 +17,23 @@ export class SignupComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private router: Router,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private asyncValidators: AsyncValidators
   ) {
     this.signupForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]],
+      email: [
+        '',
+        [Validators.required, Validators.email],
+        [this.asyncValidators.emailTaken.bind(this.asyncValidators)],
+      ],
+      password: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(6),
+          CustomValidators.passwordContainsNumber,
+        ],
+      ],
     });
   }
 

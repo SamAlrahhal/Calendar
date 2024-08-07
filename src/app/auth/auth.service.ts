@@ -7,7 +7,14 @@ import {
   signOut,
   User,
 } from '@angular/fire/auth';
-import { BehaviorSubject, Observable, of } from 'rxjs';
+import { BehaviorSubject, catchError, from, map, Observable, of } from 'rxjs';
+import {
+  Firestore,
+  collection,
+  query,
+  where,
+  getDocs,
+} from '@angular/fire/firestore';
 
 @Injectable({
   providedIn: 'root',
@@ -24,7 +31,11 @@ export class AuthService {
   private currentUserUid$: Observable<string | null> =
     this.currentUserUidSubject.asObservable();
 
-  constructor(private auth: Auth, private router: Router) {
+  constructor(
+    private auth: Auth,
+    private router: Router,
+    private firestore: Firestore
+  ) {
     const storedToken = localStorage.getItem('token');
     if (storedToken) {
       this.token = storedToken;
@@ -78,5 +89,14 @@ export class AuthService {
 
   getUid(): Observable<string | null> {
     return this.currentUserUid$;
+  }
+
+  checkEmail(email: string): Observable<boolean> {
+    const usersRef = collection(this.firestore, 'users');
+    const q = query(usersRef, where('email', '==', email));
+    return from(getDocs(q)).pipe(
+      map((querySnapshot) => !querySnapshot.empty),
+      catchError(() => of(false))
+    );
   }
 }
