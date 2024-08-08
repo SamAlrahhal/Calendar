@@ -98,21 +98,4 @@ export class AuthService {
   getUid(): Observable<string | null> {
     return this.currentUserUid$;
   }
-
-  checkEmail(email: string): Observable<boolean> {
-    console.log('Checking if email is taken:', email);
-    const usersRef = collection(this.firestore, 'users');
-    const q = query(usersRef, where('email', '==', email));
-    return from(getDocs(q)).pipe(
-      map((querySnapshot) => {
-        const isTaken = !querySnapshot.empty;
-        console.log('Email taken:', isTaken);
-        return isTaken;
-      }),
-      catchError((error) => {
-        console.error('Error checking email:', error);
-        return of(false);
-      })
-    );
-  }
 }

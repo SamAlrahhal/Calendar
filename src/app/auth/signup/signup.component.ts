@@ -24,10 +24,7 @@ export class SignupComponent implements OnInit {
       email: [
         '',
         [Validators.required, Validators.email],
-        [
-          this.asyncValidators.validateEmailFormat.bind(this.asyncValidators),
-          this.asyncValidators.emailTaken.bind(this.asyncValidators),
-        ],
+        [this.asyncValidators.validateEmailFormat.bind(this.asyncValidators)],
       ],
       password: [
         '',

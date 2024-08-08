@@ -13,8 +13,6 @@
           incorrect.</small>
         <small class="text-danger" *ngIf="signupForm.get('email')?.errors?.['invalidDomain']">Email must end with a
           valid domain (e.g., '.com').</small>
-        <small class="text-danger" *ngIf="signupForm.get('email')?.errors?.['emailTaken']">Email is already
-          taken.</small>
       </div>
     </div>
     <div class="form-group">
