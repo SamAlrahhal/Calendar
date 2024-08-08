@@ -48,10 +48,18 @@ export class AuthService {
   }
 
   signup(email: string, password: string): Promise<string> {
+    console.log('Attempting to sign up:', email);
     return createUserWithEmailAndPassword(this.auth, email, password)
-      .then(() => 'success')
+      .then(() => {
+        console.log('Sign up successful');
+        return 'success';
+      })
       .catch((error) => {
-        console.error('Signup error: ', error);
+        console.error('Signup error:', error);
+        if (error.code === 'auth/email-already-in-use') {
+          console.log('Email already in use:', email);
+          return 'Email is already in use';
+        }
         return error.message;
       });
   }
@@ -92,11 +100,19 @@ export class AuthService {
   }
 
   checkEmail(email: string): Observable<boolean> {
+    console.log('Checking if email is taken:', email);
     const usersRef = collection(this.firestore, 'users');
     const q = query(usersRef, where('email', '==', email));
     return from(getDocs(q)).pipe(
-      map((querySnapshot) => !querySnapshot.empty),
-      catchError(() => of(false))
+      map((querySnapshot) => {
+        const isTaken = !querySnapshot.empty;
+        console.log('Email taken:', isTaken);
+        return isTaken;
+      }),
+      catchError((error) => {
+        console.error('Error checking email:', error);
+        return of(false);
+      })
     );
   }
 }
