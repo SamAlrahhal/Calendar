@@ -12,6 +12,8 @@ import { environment } from '../../environments/environment';
 import { initializeApp } from 'firebase/app';
 import { CanDeactivateGuard } from '../auth/can-decativate-guard';
 import { Observable } from 'rxjs';
+import { DiscardChangesDialogComponent } from '../discard-changes-dialog/discard-changes-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-add-person',
@@ -29,7 +31,10 @@ export class AddPersonComponent implements CanDeactivateGuard {
 
   private storage = getStorage(initializeApp(environment.firebase));
 
-  constructor(private birthdayService: BirthdayService) {}
+  constructor(
+    private birthdayService: BirthdayService,
+    private dialog: MatDialog
+  ) {}
 
   onSubmit() {
     this.saved = true;
@@ -80,7 +85,9 @@ export class AddPersonComponent implements CanDeactivateGuard {
 
   canDeactivate(): Observable<boolean> | Promise<boolean> | boolean {
     if (this.saved === false) {
-      return confirm('Do you want to discard the changes?');
+      const dialogRef = this.dialog.open(DiscardChangesDialogComponent);
+
+      return dialogRef.afterClosed().toPromise();
     }
     return true;
   }

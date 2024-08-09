@@ -21,6 +21,7 @@ import { SignupComponent } from './auth/signup/signup.component';
 import { AdminComponent } from './admin/admin.component';
 import { ShowAllBirthdaysComponent } from './admin/show-all-birthdays/show-all-birthdays.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { DiscardChangesDialogComponent } from './discard-changes-dialog/discard-changes-dialog.component';
 
 @NgModule({
   declarations: [
@@ -34,6 +35,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     SignupComponent,
     AdminComponent,
     ShowAllBirthdaysComponent,
+    DiscardChangesDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -49,5 +51,6 @@ import { ReactiveFormsModule } from '@angular/forms';
   ],
   providers: [BirthdayService],
   bootstrap: [AppComponent],
+  entryComponents: [DiscardChangesDialogComponent],
 })
 export class AppModule {}
