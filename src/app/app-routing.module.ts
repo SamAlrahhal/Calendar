@@ -10,6 +10,7 @@ import { AppComponent } from './app.component';
 import { AdminComponent } from './admin/admin.component';
 import { AdminGuardService } from './auth/admin-guard.service';
 import { ShowAllBirthdaysComponent } from './admin/show-all-birthdays/show-all-birthdays.component';
+import { CanDeactivateGuard } from './auth/can-decativate-guard';
 
 const routes: Routes = [
   {
@@ -28,6 +29,7 @@ const routes: Routes = [
     path: 'add-person',
     component: AddPersonComponent,
     canActivate: [AuthGuard],
+    canDeactivate: [CanDeactivateGuard],
   },
   { path: 'show-all', component: ShowAllComponent, canActivate: [AuthGuard] },
   { path: 'signup', component: SignupComponent, canActivate: [UnAuthGuard] },
