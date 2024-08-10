@@ -21,6 +21,7 @@ import { SignupComponent } from './auth/signup/signup.component';
 import { AdminComponent } from './admin/admin.component';
 import { ShowAllBirthdaysComponent } from './admin/show-all-birthdays/show-all-birthdays.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { HoverHighlightDirective } from './hover-highlight.directive';
 
 @NgModule({
   declarations: [
@@ -34,6 +35,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     SignupComponent,
     AdminComponent,
     ShowAllBirthdaysComponent,
+    HoverHighlightDirective,
   ],
   imports: [
     BrowserModule,
