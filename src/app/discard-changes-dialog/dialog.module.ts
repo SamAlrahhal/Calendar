@@ -6,6 +6,6 @@ import { DiscardChangesDialogComponent } from './discard-changes-dialog.componen
 @NgModule({
   declarations: [DiscardChangesDialogComponent],
   imports: [CommonModule, MatDialogModule],
-  entryComponents: [DiscardChangesDialogComponent], // Required to load dialogs dynamically
+  entryComponents: [DiscardChangesDialogComponent],
 })
 export class DialogModule {}
